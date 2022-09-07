@@ -1374,7 +1374,7 @@ class Testclass{
 >   ```java
 >   int a = 10;
 >   Integer b = a;//此时a会自动装箱为我们的Integer包装类并返回给b
->                             
+>                               
 >   Integer b = new Integer(10);
 >   int a = b//此时b会自动拆箱为我们的int数据类型并返回给a
 >   ```
@@ -2373,35 +2373,49 @@ public class 自定义异常类名 extends Java内置异常名{}
 
 ### 程序,进程,线程
 
-<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-1" alt="image-20220831142700678" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-1" alt="image-20220831142700678" style="zoom: 60%;" />
+
+### `Java`程序运行流程
+
+- :one:`Java`首先开辟一个用于**运行我们的程序的进程**
+- :two:找到我们要运行的方法作为我们程序的入口,在:one:创建出来的进程下**新建一个`主线程`**然后让这个主线程执行我们的这个方法
+- :three:若我们主线程下的方法中存在**新建线程的语句**,那么其就会在:one:建立的进程下再新建一个`副线程1`,然后在这个``副线程1``下来**运行我们希望该线程执行的语句**
+  - 当然我们的**副线程也可能申请新建线程**,如果这样,那么还是会在:one:建立的进程下**新建一个线程**
+- :four:若主线程还有申请新建线程的语句那么还是会按照:three:的流程进行
+- ==**注意**:在我们的:one:建立的进程下,在**没有使用`join()`这些操控线程的方法的情况下**,**各个线程都是并发执行的**(即便是主线程也是与副线程并发的)==
 
 ### 多线程的优点
 
-<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-2" alt="image-20220831143703254" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-2" alt="image-20220831143703254" style="zoom:60%;" />
 
 ### 多线程应用场景
 
-<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-3" alt="image-20220831144325057" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-3" alt="image-20220831144325057" style="zoom:60%;" />
 
 ## 线程的创建与使用
 
 ### 方式一
 
-- :one:创建一个继承与`Thread`类的子类
+#### 基本步骤
+
+- :one:创建一个继承与`Thread`类的**子类**
 - :two:子类重写`Thread`类的`run()`方法(**该方法中的语句体即为我们需要线程执行的程序语句**)
 - :three:在我们要创建线程的其他类的方法中**创建该子类的类实例**
 - :four:通过调用子类类实例继承自`Thread`类的`start()`方法来**由系统创建出线程**
 
 #### 解析
 
-<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-4" alt="image-20220831145320336" style="zoom: 67%;" />
+<img src="https://raw.githubusercontent.com/tangling0112/MyPictures/master/img/Java%E5%9F%BA%E7%A1%800-4" alt="image-20220831145320336" style="zoom: 60%;" />
 
 - :one:首先我们的`main()`方法对应的进程具备一个**主线程**,该线程一直执行到`MyThread t1 = new MyThread`
 - :two:然后我们的进程就会新建一个副线程来执行`t1`类实例的`run()`方法,此时我们的**主线程就会与新建的这个副线程构成并发执行**
 
 #### 注意事项
 
-- :one:对于一个上述这样的类实例而言,只有在第一次调用`start()`方法时才会开辟出新的线程,而**第二次调用时就会发生异常报错**
+- :one:对于一个上述这样的类实例而言,只有在**第一次调用**`start()`方法时才会开辟出新的线程,而**第二次调用时就会发生异常报错**
+- :two:如果我们想要再次开启一个线程,那么我们必须再**新建一个上述这样的类实例**,然后调用该类实例的`start()`方法.
+
+### 方式二
 
 ## 线程的生命周期
 
